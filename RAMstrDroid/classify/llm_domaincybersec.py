@@ -31,8 +31,8 @@ def chunk_text(text, chunk_size=512):
     tokens = tokenizer.encode(text, add_special_tokens=False)
     return [tokenizer.decode(tokens[i:i+chunk_size]) for i in range(0, len(tokens), chunk_size)]
 
-root_dir = "/mnt/malware_ram"
-class_dirs = ['benign_dumps', 'dataset_dumps']
+root_dir = "dataset/path"
+class_dirs = ['benign_dumps', 'malware/dumps']
 
 for label, class_dir in enumerate(class_dirs):
     class_dir_path = os.path.join(root_dir, class_dir)
@@ -40,29 +40,26 @@ for label, class_dir in enumerate(class_dirs):
         continue
 
     for apk in tqdm(os.listdir(class_dir_path), desc=f"Processing {class_dir} APKs", unit="apk"):
-        if apk != "deed5f52de0c3318c44c3312ee2e636a236d1d13f28c64f8242713b3e7b8a4f2.apk_vbkoxh.cswnpr_angry_birds_seasons_2882":
-            class_path = os.path.join(class_dir_path, apk, 'strings')
-            if not os.path.exists(class_path):
-                continue
+    
 
-            str_path = os.path.join(class_path, 'strings.txt')
-            if not os.path.exists(str_path):
-                continue
+        str_path = os.path.join(class_path, 'strings.txt')
+        if not os.path.exists(str_path):
+            continue
 
-            with open(str_path, encoding='utf-8', errors='ignore') as f:
-                lines = f.readlines()
+        with open(str_path, encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
 
-            full_text = " ".join(lines)
-            chunks = chunk_text(full_text)
+        full_text = " ".join(lines)
+        chunks = chunk_text(full_text)
 
-            # Batch classify all chunks (MUCH faster)
-            if not chunks:
-                continue
+        # Batch classify all chunks (MUCH faster)
+        if not chunks:
+            continue
 
-            predictions = classifier(chunks, batch_size=8)
-            top_result = max(predictions, key=lambda x: x['score'])
+        predictions = classifier(chunks, batch_size=8)
+        top_result = max(predictions, key=lambda x: x['score'])
 
-            print(f"Class: {class_dir}")
-            print(f"APK: {apk}")
-            print(f"Prediction: {top_result['label']}, Confidence: {top_result['score']:.2f}")
-            print("-" * 50)
+        print(f"Class: {class_dir}")
+        print(f"APK: {apk}")
+        print(f"Prediction: {top_result['label']}, Confidence: {top_result['score']:.2f}")
+        print("-" * 50)

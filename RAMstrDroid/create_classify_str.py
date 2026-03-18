@@ -130,11 +130,11 @@ def training(data, labels, save_dir):
     return model, test_loader
 
 
-save_dir = "/home/ssanna/Desktop/malware_ram/Android/"
+save_dir = "path/dir/save"
 
 # Load your data
-benign_dir = "/mnt/malware_ram/Android/Benign_App_Memdumps"
-malicious_dir = "/mnt/malware_ram/Android/Malicious_App_Memdumps"
+benign_dir = "path/benign"
+malicious_dir = "path/malware"
 
 if "labels.pkl" in os.listdir(save_dir) and "texts.pkl" in os.listdir(save_dir):
     print("Loading dataset \n")

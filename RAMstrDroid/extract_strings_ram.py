@@ -4,7 +4,7 @@ from tqdm import tqdm
 import sys
 
 class_ds = sys.argv[1]
-ds_path = os.path.join("/mnt/malware_ram/", class_ds)
+ds_path = os.path.join("path/dataset", class_ds)
 count = 0
 
 for i, apk in enumerate(tqdm(os.listdir(ds_path), desc="Processing APKs")):

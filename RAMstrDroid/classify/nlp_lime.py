@@ -39,8 +39,8 @@ def load_dataset(root_dir, class_dirs, class_filter=None):
 # ---------------------------
 # Load and Split Data
 # ---------------------------
-root_dir = "/mnt/malware_ram/Android"
-class_dirs = ['benign_dumps', 'dumps_dataset']
+root_dir = "dataset/path"
+class_dirs = ['benign_dumps', 'malware_dumps']
 class_names = ['Benign', 'Malicious']
 
 texts, labels = load_dataset(root_dir, class_dirs)
@@ -63,13 +63,13 @@ model.fit(X_train, y_train)
 # Evaluate Model
 # ---------------------------
 y_pred = model.predict(X_test)
-print("\n📊 Classification Report:\n")
+print("\n Classification Report:\n")
 print(classification_report(y_test, y_pred, target_names=class_names))
 
 # ---------------------------
 # LIME Explainability - All Samples
 # ---------------------------
-print("\n🔍 Generating LIME explanations for all test samples...\n")
+print("\n Generating LIME explanations for all test samples...\n")
 explainer = LimeTextExplainer(class_names=class_names)
 explanations = []
 
@@ -111,7 +111,7 @@ for item in explanations:
         row[feat] = score
     rows.append(row)
 
-#df_exp = pd.DataFrame(rows)
-#df_exp.to_csv("lime_explanations.csv", index=False)
+df_exp = pd.DataFrame(rows)
+df_exp.to_csv("lime_explanations.csv", index=False)
 
 

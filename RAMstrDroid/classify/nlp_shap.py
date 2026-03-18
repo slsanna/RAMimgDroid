@@ -39,8 +39,8 @@ def load_dataset(root_dir, class_dirs, class_filter=None):
 # ---------------------------
 # Load and Split Data
 # ---------------------------
-root_dir = "/mnt/malware_ram/Android"
-class_dirs = ['benign_dumps', 'dumps_dataset']
+root_dir = "dataset_path"
+class_dirs = ['benign_dumps', 'malware_dumps']
 class_names = ['Benign', 'Malicious']
 
 texts, labels = load_dataset(root_dir, class_dirs)
@@ -63,13 +63,13 @@ clf.fit(X_train_vec, y_train)
 # Evaluate Model
 # ---------------------------
 y_pred = clf.predict(X_test_vec)
-print("\n📊 Classification Report:\n")
+print("\n Classification Report:\n")
 print(classification_report(y_test, y_pred, target_names=class_names))
 
 # ---------------------------
 # SHAP Explainability - All Samples
 # ---------------------------
-print("\n🔍 Generating SHAP explanations for all test samples...\n")
+print("\n Generating SHAP explanations for all test samples...\n")
 
 explainer = shap.LinearExplainer(clf, X_train_vec, feature_perturbation="interventional")
 feature_names = vectorizer.get_feature_names_out()
@@ -124,6 +124,6 @@ for item in explanations:
         row[feat] = score
     rows.append(row)
 
-#df_exp = pd.DataFrame(rows)
-#df_exp.to_csv("shap_explanations.csv", index=False)
+df_exp = pd.DataFrame(rows)
+df_exp.to_csv("shap_explanations.csv", index=False)
 

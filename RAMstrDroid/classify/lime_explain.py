@@ -1,21 +1,20 @@
 import os
 import json
 import joblib
-import shap
-import numpy as np
 import pandas as pd
 from tqdm import tqdm
+from lime.lime_text import LimeTextExplainer
 from sklearn.model_selection import train_test_split
 
 # ---------------------------
 # Configurations
 # ---------------------------
 MODEL_PATH = "stack_strings.pkl"
-ROOT_DIR = "/mnt/malware_ram/Android"
+ROOT_DIR = "path/dataset"
 CLASS_DIRS = ['benign_dumps', 'dumps_dataset']
 CLASS_NAMES = ['Benign', 'Malicious']
-OUTPUT_JSON = "shap_explanations_stack.json"
-OUTPUT_CSV = "shap_explanations_stack.csv"
+OUTPUT_JSON = "lime_explanations_stack.json"
+OUTPUT_CSV = "lime_explanations_stack.csv"
 
 # ---------------------------
 # Dataset Loader
@@ -47,38 +46,34 @@ def load_dataset(root_dir, class_dirs):
 # ---------------------------
 # Load Model and Data
 # ---------------------------
-print("📦 Loading model...")
+print("Loading model...")
 model = joblib.load(MODEL_PATH)
-tfidf = model.named_steps['tfidf']
-clf = model.named_steps['clf']
 
-print("📂 Loading dataset...")
+print("Loading dataset...")
 texts, labels = load_dataset(ROOT_DIR, CLASS_DIRS)
 X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
 
-X_train_tfidf = tfidf.transform(X_train)
-X_test_tfidf = tfidf.transform(X_test)
 y_pred = model.predict(X_test)
 
 # ---------------------------
-# SHAP Explainability
+# LIME Explainability
 # ---------------------------
-print("🔍 Generating SHAP explanations...")
-explainer = shap.Explainer(clf, X_train_tfidf, feature_names=tfidf.get_feature_names_out())
-shap_values = explainer(X_test_tfidf)
-
+print("Generating LIME explanations...")
+explainer = LimeTextExplainer(class_names=CLASS_NAMES)
 explanations = []
-for i in range(len(X_test)):
-    row = shap_values[i]
-    top_indices = np.argsort(-np.abs(row.values))[:5]
+
+for i, sample_text in enumerate(X_test):
+    true_label = y_test[i]
+    predicted_label = y_pred[i]
+
+    exp = explainer.explain_instance(sample_text, model.predict_proba, num_features=5)
 
     explanation = {
         'index': i,
-        'true_label': CLASS_NAMES[y_test[i]],
-        'predicted_label': CLASS_NAMES[y_pred[i]],
-        'features': [(row.feature_names[idx], float(row.values[idx])) for idx in top_indices]
+        'true_label': CLASS_NAMES[true_label],
+        'predicted_label': CLASS_NAMES[predicted_label],
+        'features': exp.as_list()
     }
-
     explanations.append(explanation)
 
     # Optional: Print to console
@@ -90,7 +85,7 @@ for i in range(len(X_test)):
 # ---------------------------
 # Save Outputs
 # ---------------------------
-print(f"💾 Saving SHAP explanations to {OUTPUT_JSON} and {OUTPUT_CSV}...")
+print(f"Saving LIME explanations to {OUTPUT_JSON} and {OUTPUT_CSV}...")
 
 with open(OUTPUT_JSON, "w") as f:
     json.dump(explanations, f, indent=2)
@@ -106,7 +101,7 @@ for item in explanations:
         row[feat] = score
     rows.append(row)
 
-#df_exp = pd.DataFrame(rows)
-#df_exp.to_csv(OUTPUT_CSV, index=False)
+df_exp = pd.DataFrame(rows)
+df_exp.to_csv(OUTPUT_CSV, index=False)
 
-print("✅ SHAP explanation script completed.")
+print("LIME explanation script completed.")
