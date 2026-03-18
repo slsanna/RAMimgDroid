@@ -92,8 +92,8 @@ def load_feature_csv(csv_path):
     return X, y, df
 
 # Dataset preparation
-root_dir = "/mnt/malware_ram/Android"
-classes = {'benign_dumps': 0, 'dumps_dataset': 1}
+root_dir = "path/dir"
+classes = {'benign_dumps': 0, 'malware_dumps': 1}
 output_csv = 'image_features_dataset.csv'
 
 # Load existing data if any

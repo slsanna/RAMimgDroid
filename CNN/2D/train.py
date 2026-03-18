@@ -293,7 +293,7 @@ class CustomDataset(Dataset):
             "libraries": [r"\.so", r"\[anon:lib.*"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -368,7 +368,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
     # === APK Index-Based Selection ===
     root_dir = "/mnt/malware_ram/Android"
     benign_apk_paths = sorted(glob(f"{root_dir}/benign_dumps/*"))
-    malicious_apk_paths = sorted(glob(f"{root_dir}/dumps_dataset/*"))
+    malicious_apk_paths = sorted(glob(f"{root_dir}/malware_dumps/*"))
 
     # === Use explicit indices instead of random split ===
     benign_train_apk_indices = list(range(1300))
@@ -383,7 +383,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
     
     num_epochs = 100
 
-    #save_dir = "/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/pre-trained"
+    save_dir = "save/dir/path"
     os.makedirs(save_dir, exist_ok=True)
 
     log_path = os.path.join(save_dir, f"train_{model_name}_{color}_{mem_regions}_{pretrained_val}_misclassified-regions.log")
@@ -573,5 +573,5 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
 
 
 # === Run Training ===
-#save_dir = "/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/resnet18_100epochs"
-#train_memory_regions('data_stack', 'resnet18', 'True', "RGB", save_dir)
+save_dir = "save/dir/path"
+train_memory_regions('data_stack', 'resnet18', 'True', "RGB", save_dir)

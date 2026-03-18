@@ -232,7 +232,7 @@ class CustomDataset(Dataset):
             "libraries": [r"\.so", r"\[anon:lib.*"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -323,9 +323,9 @@ def test_memory_regions(mem_regions, model_name, pretrained_val, color, model_pa
     import collections
     from glob import glob
 
-    root_dir = "/mnt/malware_ram/Android"
+    root_dir = "path/dataset"
     benign_test_apks = sorted(glob(f"{root_dir}/benign_dumps/*"))[1500:]
-    malicious_test_apks = sorted(glob(f"{root_dir}/dumps_dataset/*"))[1500:]
+    malicious_test_apks = sorted(glob(f"{root_dir}/malware_dumps/*"))[1500:]
 
     is_dexray = model_name == "dexray"
 
@@ -402,6 +402,6 @@ test_memory_regions(
     model_name="dexray",
     pretrained_val='false',
     color='L',
-    model_path="/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/sota_CNN/data_stack_dexray_L_best_validation_false.pth",
-    save_dir="/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/sota_CNN"
+    model_path="model/path",
+    save_dir="save/directory/path"
 )

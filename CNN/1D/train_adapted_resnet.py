@@ -153,7 +153,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color_mode, ep
     color_mode: "RGB" or "Grayscale"
     pretrained_val: string token used in filenames (e.g., "True")
     """
-    root_dir = "/mnt/malware_ram/Android"
+    root_dir = "dataset/path"
 
     log_path = f"resnet18-train_{model_name}_{color_mode}_{mem_regions}.log"
     logger.remove()
@@ -161,7 +161,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color_mode, ep
 
     # APK splits (same as your apk-based script)
     benign_apks = sorted(os.listdir(os.path.join(root_dir, "benign_dumps")))
-    malicious_apks = sorted(os.listdir(os.path.join(root_dir, "dumps_dataset")))
+    malicious_apks = sorted(os.listdir(os.path.join(root_dir, "malware_dumps")))
 
     train_benign_apks = benign_apks[:1300]
     train_malicious_apks = malicious_apks[:1300]

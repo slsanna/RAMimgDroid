@@ -122,7 +122,7 @@ def train_and_evaluate(root_dir, selection_mode="data_stack"):
         print(f"Epoch {epoch+1} | Loss: {np.mean(losses):.4f}")
 
     # Save model and training parameters after training
-    save_path_train = os.path.join("/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn", "trained_fake_audio_model.pth")
+    save_path_train = os.path.join("path", "trained_fake_audio_model.pth")
     torch.save(model.state_dict(), save_path_train)
     print(f"Model and parameters saved to {save_path_train}")
 
@@ -147,7 +147,7 @@ def train_and_evaluate(root_dir, selection_mode="data_stack"):
     apk_pred = [apk_preds[apk] for apk in apk_preds]
 
     # Save model again after evaluation (optional second checkpoint)
-    save_path_eval = os.path.join("/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn", "evaluated_fake_audio_model.pth")
+    save_path_eval = os.path.join("path", "evaluated_fake_audio_model.pth")
     torch.save(model.state_dict(), save_path_eval)
     print(f"Evaluation model saved to {save_path_eval}")
 
@@ -165,4 +165,4 @@ def train_and_evaluate(root_dir, selection_mode="data_stack"):
                 print(f"    Region: {region} | Prob: {prob:.4f}")
 
 if __name__ == "__main__":
-    train_and_evaluate("/mnt/malware_ram/Android")
+    train_and_evaluate("dataset/path")

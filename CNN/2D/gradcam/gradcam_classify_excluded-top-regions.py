@@ -26,7 +26,7 @@ class CustomDataset(Dataset):
             # Add more modes as needed
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -159,8 +159,8 @@ from sklearn.metrics import confusion_matrix, classification_report
 if __name__ == "__main__":
     # Config
     model_name = "resnet18"
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/resnet18_100epochs/data_stack_resnet18_RGB_best_validation_True.pth"
-    root_dir = "/mnt/malware_ram/Android"
+    model_path = "path/pretrained"
+    root_dir = "path/dataset"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     log_path = os.path.join(f"gradcam_RGB_resnet18_True_excluded-top-regions.log")
 
@@ -175,7 +175,7 @@ if __name__ == "__main__":
 
     # Get APK list
     benign_val_apks = sorted([os.path.join(root_dir, "benign_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "benign_dumps"))])[1500:]
-    malicious_val_apks = sorted([os.path.join(root_dir, "dumps_dataset", apk) for apk in os.listdir(os.path.join(root_dir, "dumps_dataset"))])[1500:]
+    malicious_val_apks = sorted([os.path.join(root_dir, "malware_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "malware_dumps"))])[1500:]
     apk_list = benign_val_apks + malicious_val_apks
 
     y_true = []

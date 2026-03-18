@@ -105,7 +105,7 @@ def cnn_then_classifiers(mem_regions="data_stack"):
     val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
     model = ResNet1DTransfer().to(device)
-    state_dict = torch.load("/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth", map_location=device)
+    state_dict = torch.load("path/to/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth", map_location=device)
     allowed_keys = ["feature_extractor.", "pool."]
     filtered_dict = {k: v for k, v in state_dict.items() if any(k.startswith(prefix) for prefix in allowed_keys)}
     model.load_state_dict(filtered_dict, strict=False)

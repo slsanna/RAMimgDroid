@@ -232,7 +232,7 @@ class CustomDataset(Dataset):
             "libraries": [r"\.so", r"\[anon:lib.*"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -479,7 +479,7 @@ def train_memory_regionsOLD(mem_regions, model_name, pretrained_val, color):
     malicious_val_indices = list(range(1300, 1500))
     num_epochs = 100
 
-    save_dir = "/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/pre-trained"
+    save_dir = "save/dir/path"
     os.makedirs(save_dir, exist_ok=True)
 
     log_path = os.path.join(save_dir, f"train_{model_name}_{color}_{mem_regions}_{pretrained_val}_misclassified-regions.log")
@@ -592,18 +592,6 @@ def train_memory_regionsOLD(mem_regions, model_name, pretrained_val, color):
                 for apk_name, region, actual, predicted in misclassified:
                         logger.info(f"Misclassified: APK={apk_name} | Region={region} | True={actual} | Predicted={predicted}")
 
-            """for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
-                outputs = model(images)
-                if is_dexray:
-                    loss = criterion(outputs, labels)
-                    probs = outputs
-                else:
-                    loss = criterion(outputs, labels)
-                    probs = torch.softmax(outputs, dim=1)[:, 1]
-                all_labels.extend(labels.cpu().numpy())
-                all_probs.extend(probs.cpu().numpy())
-            """
        
         val_loss /= len(val_loader.dataset)
         fpr, tpr, thresholds = roc_curve(all_labels, all_probs)
@@ -669,7 +657,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
 
     root_dir = "/mnt/malware_ram/Android"
     benign_apk_paths = sorted(glob(f"{root_dir}/benign_dumps/*"))
-    malicious_apk_paths = sorted(glob(f"{root_dir}/dumps_dataset/*"))
+    malicious_apk_paths = sorted(glob(f"{root_dir}/malware_dumps/*"))
 
     benign_train_apks = benign_apk_paths[:1300]
     benign_val_apks = benign_apk_paths[1300:1500]
@@ -862,5 +850,4 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
 
 
 # === Run Training ===
-#train_memory_regions('data_stack', 'resnet18', 'True', "RGB")
-train_memory_regions('data_stack', 'dexray', 'false', 'L', '/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/sota_CNN')
+train_memory_regions('data_stack', 'dexray', 'false', 'L', 'path')

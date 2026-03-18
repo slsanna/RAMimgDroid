@@ -22,7 +22,7 @@ for i, apk in enumerate(tqdm(os.listdir(ds_path), desc="Processing APKs")):
         if mode not in os.listdir(out_horizontal_dir) or len(os.listdir((os.path.join(out_horizontal_dir, mode)))) != len(os.listdir(dump_dir_apk)):
             print(f"Converting to horizontal images {apk} ...")
             out = subprocess.run(
-                ["python3", "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_img_conversion.py", dump_dir_apk, "--output_dir", out_horizontal_dir, "--mode", mode],
+                ["python3", "path/to/1d_img_conversion.py", dump_dir_apk, "--output_dir", out_horizontal_dir, "--mode", mode],
                 capture_output=True,
                 text=False
             )

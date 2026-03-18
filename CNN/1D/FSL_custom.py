@@ -115,7 +115,7 @@ def cnn_then_classifiers(mem_regions="data_stack"):
     val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
     model = RGB1DCNN().to(device)
-    state_dict = torch.load("/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/custom1d/1D_data_stack_rgb1dcnn_best_val.pth", map_location=device)
+    state_dict = torch.load("path/to/1D_data_stack_rgb1dcnn_best_val.pth", map_location=device)
     filtered_dict = {k: v for k, v in state_dict.items() if k.startswith("features.")}
     model.load_state_dict(filtered_dict, strict=False)
     model.eval()

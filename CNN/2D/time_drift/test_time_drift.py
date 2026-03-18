@@ -103,7 +103,7 @@ class CustomDataset(Dataset):
             "libraries": [r"\.so", r"\[anon:lib.*"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -323,7 +323,7 @@ def match_malware_apk_folders(csv_path, malware_dir):
 
 # === Split benign/malicious APKs by year ===
 def prepare_train_test_mal_apks(csv_path="apk_creation_years_aapt.csv", root_dir="/mnt/malware_ram/Android"):
-    malware_dir = os.path.join(root_dir, "dumps_dataset")
+    malware_dir = os.path.join(root_dir, "malware_dumps")
 
     train_malicious_apks, val_malicious_apks = match_malware_apk_folders(csv_path, malware_dir)
 
@@ -331,8 +331,8 @@ def prepare_train_test_mal_apks(csv_path="apk_creation_years_aapt.csv", root_dir
 
 
 malicious_train_apks, malicious_test_apks = prepare_train_test_mal_apks()
-root_dir = "/mnt/malware_ram/Android"
-model_path = f"/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/time_drift/data_stack_resnet18_RGB_best_train_True.pth"
+root_dir = "dataset/path"
+model_path = f"path/model"
 benign_apk_paths = sorted(glob(f"{root_dir}/benign_dumps/*"))
 benign_test_apk_indices = list(range(1500, 2279))
 mem_regions = "data_stack"

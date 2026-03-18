@@ -4,10 +4,10 @@ from tqdm import tqdm
 from PIL import Image
 from collections import defaultdict, Counter
 
-root_dataset = "/mnt/malware_ram/Android"
+root_dataset = "path/dataset"
 classes_dataset = {
     'benign_dumps': 'goodware',
-    'dumps_dataset': 'malware'
+    'malware_dumps': 'malware'
 }
 # Your selection_map
 selection_map = {

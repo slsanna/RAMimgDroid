@@ -439,7 +439,7 @@ if __name__ == "__main__":
         mem_regions="data_stack",
         model_name="resnet1d",
         color_mode="RGB",
-        path_ds="/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/resnet",
+        path_ds="path/dataset",
         split="best_validation",
         pretrained_val="True",
         agg="mean"

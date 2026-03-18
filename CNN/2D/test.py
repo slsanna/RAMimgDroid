@@ -249,7 +249,7 @@ class CustomDataset(Dataset):
             "libraries": [r"\.so", r"\[anon:lib.*"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -328,8 +328,8 @@ mem_regions = "data_stack"
 model_name = "resnet18"
 color_mode = "RGB"
 pretrained_val = True  # This flag only controls architecture init, not weight loading
-model_path = f"/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/resnet18_100epochs/data_stack_resnet18_RGB_best_validation_True.pth"
-root_dir = "/mnt/malware_ram/Android"
+model_path = f"pretrained/model/path"
+root_dir = "dataset/path"
 batch_size = 32
 
 # === DEVICE SETUP ===
@@ -337,7 +337,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # === LOAD TEST APKS ===
 benign_apk_paths = sorted(glob(f"{root_dir}/benign_dumps/*"))[1500:]
-malicious_apk_paths = sorted(glob(f"{root_dir}/dumps_dataset/*"))[1500:]
+malicious_apk_paths = sorted(glob(f"{root_dir}/malware_dumps/*"))[1500:]
 
 # === BUILD DATASETS ===
 test_benign = CustomDataset(

@@ -46,7 +46,7 @@ class CustomDataset(Dataset):
             "memory_regions": [r"\[stack\]", r"\[vvar\]"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -208,11 +208,11 @@ def extract_pixel_bytes_from_binary(bin_path, coords, orig_w, orig_h):
     return results
 
 if __name__ == "__main__":
-    apk_path = "/mnt/malware_ram/Android/dumps_dataset/55f6ddecc88252158d399cf64d22b11c2ecf0a8130bc30c266ccf03d45a59ab3.apk_com.nameown12_Chrome_2688"
+    apk_path = "apk/path"
 
     model_name = "resnet18"
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/resnet18_100epochs/data_stack_resnet18_RGB_best_validation_True.pth"
-    root_dir = "/mnt/malware_ram/Android"
+    model_path = "pretrained/path"
+    root_dir = "dataset/path"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     logger.remove()

@@ -27,8 +27,8 @@ from catboost import CatBoostClassifier
 # =========================
 # CONFIG (edit paths)
 # =========================
-CSV_PATH        = "/home/ssanna/Desktop/malware_ram/Android/imgs/features/image_features_dataset.csv"
-CACHE_SHARD_DIR = "/home/ssanna/Desktop/malware_ram/Android/imgs/features/cache_shards"
+CSV_PATH        = "path/to/image_features_dataset.csv"
+CACHE_SHARD_DIR = "path/to/cache_shards"
 MODEL_DIR       = "saved_models_R"
 RANDOM_STATE    = 42
 
@@ -57,7 +57,7 @@ def extract_apk_tag(fp: str) -> str:
     """Robust APK id extraction from file_path."""
     m = re.search(r"/Android/[^/]+/([^/]+)/images/", fp)
     if m: return m.group(1)
-    m = re.search(r"/(benign_dumps|dumps_dataset)/([^/]+)/images/", fp)
+    m = re.search(r"/(benign_dumps|malware_dumps)/([^/]+)/images/", fp)
     if m: return m.group(2)
     parts = fp.split("/")
     if "images" in parts:
@@ -166,7 +166,7 @@ def build_shards(csv_path=CSV_PATH, out_dir=CACHE_SHARD_DIR,
         f.write(f"dim={dim}\n")
         f.write(f"chunk_size={chunk_size}\n")
         f.write(f"dtype={shard_dtype}\n")
-    print("✅ Shards ready at:", out_dir)
+    print(" Shards ready at:", out_dir)
 
 # =========================
 # LOADING FROM SHARDS (ALL)
@@ -543,7 +543,7 @@ def run_hyperparameter_tuning(X_train, y_train, X_test, y_test, apk_test, fp_tes
         out = os.path.join(MODEL_DIR, name.replace(" ", "") + ".pkl")
         with open(out, 'wb') as f:
             pickle.dump(best, f)
-        print(f"✅ Saved {name} to {out}")
+        print(f"Saved {name} to {out}")
         evaluate_apk_prob_agg(best, X_test, y_test, apk_test, fp_test, model_name=name, list_region_names=list_regions)
 
 def run_voting_ensemble(X_train, y_train, X_test, y_test, apk_test, fp_test, list_regions=False):
@@ -625,14 +625,14 @@ def main():
 
     # Load according to split mode
     if args.load_all:
-        print("📦 Loading ALL shards (ensure you have enough RAM!)")
+        print(" Loading ALL shards (ensure you have enough RAM!)")
         X, y, apk, fp = load_all_shards(CACHE_SHARD_DIR)
         df = pd.DataFrame({"features": list(X), "label": y, "apk_tag": apk, "file_path": fp})
         print(f"Loaded {len(df):,} rows")
         X_train, y_train, apk_train, fp_train, X_test, y_test, apk_test, fp_test = grouped_split_by_apk_df(df, test_size=0.2)
     else:
         if args.split_mode == "apk":
-            print("📦 APK-level split: select APKs per class for TRAIN; ALL remaining APKs → TEST")
+            print(" APK-level split: select APKs per class for TRAIN; ALL remaining APKs → TEST")
             X_train, y_train, apk_train, fp_train, X_test, y_test, apk_test, fp_test = load_by_apk_split(
                 shard_dir=CACHE_SHARD_DIR,
                 train_apks_per_class=args.train_apks_per_class,
@@ -643,7 +643,7 @@ def main():
                 seed=RANDOM_STATE
             )
         elif args.split_mode == "apk_dirs":
-            print("📦 APK-level split from specific directories")
+            print(" APK-level split from specific directories")
             if not args.train_malware_dir or not args.train_benign_dir:
                 raise ValueError("In apk_dirs mode, both --train-malware-dir and --train-benign-dir are required.")
             X_train, y_train, apk_train, fp_train, X_test, y_test, apk_test, fp_test = load_by_apk_split_from_dirs(
@@ -658,14 +658,14 @@ def main():
                 seed=RANDOM_STATE
             )
         else:
-            print("📦 Region-level sampling: cap training regions per APK; ALL remaining regions → TEST")
+            print(" Region-level sampling: cap training regions per APK; ALL remaining regions → TEST")
             X_train, y_train, apk_train, fp_train, X_test, y_test, apk_test, fp_test = load_sampled_by_apk(
                 CACHE_SHARD_DIR, per_apk_train=args.per_apk_train, seed=RANDOM_STATE
             )
 
         # Safety fallback if test is empty
         if len(X_test) == 0 or len(np.unique(apk_test)) == 0:
-            print("⚠️ No test APKs detected after split. Falling back to region-level sampler.")
+            print(" No test APKs detected after split. Falling back to region-level sampler.")
             X_train, y_train, apk_train, fp_train, X_test, y_test, apk_test, fp_test = load_sampled_by_apk(
                 CACHE_SHARD_DIR, per_apk_train=max(200, args.per_apk_train), seed=RANDOM_STATE
             )
@@ -687,7 +687,7 @@ def main():
     run_voting_ensemble(X_train, y_train, X_test, y_test, apk_test, fp_test, list_regions=args.list_region_names)
     run_boosting_models(X_train, y_train, X_test, y_test, apk_test, fp_test, list_regions=args.list_region_names)
 
-    print("\n✅ Done.")
+    print("\n Done.")
 
 if __name__ == "__main__":
     main()

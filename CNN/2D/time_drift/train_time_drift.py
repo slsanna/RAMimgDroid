@@ -103,7 +103,7 @@ class CustomDataset(Dataset):
             "libraries": [r"\.so", r"\[anon:lib.*"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -322,8 +322,8 @@ def match_malware_apk_folders(csv_path, malware_dir):
 
 
 # === Split benign/malicious APKs by year ===
-def prepare_train_test_mal_apks(csv_path="apk_creation_years_aapt.csv", root_dir="/mnt/malware_ram/Android"):
-    malware_dir = os.path.join(root_dir, "dumps_dataset")
+def prepare_train_test_mal_apks(csv_path="apk_creation_years_aapt.csv", root_dir="dataset/path"):
+    malware_dir = os.path.join(root_dir, "malware_dumps")
 
     train_malicious_apks, val_malicious_apks = match_malware_apk_folders(csv_path, malware_dir)
 
@@ -339,7 +339,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
     ])
 
     malicious_train_apks, malicious_val_apks = prepare_train_test_mal_apks()
-    root_dir = "/mnt/malware_ram/Android"
+    root_dir = "dataset/path"
     benign_apk_paths = sorted(glob(f"{root_dir}/benign_dumps/*"))
     benign_train_apk_indices = list(range(1300))
     benign_val_apk_indices = list(range(1300, 1500))
@@ -353,7 +353,7 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
     logger.remove()
     logger.add(log_path, format="{message}")
 
-    root_dir = "/mnt/malware_ram/Android"
+    root_dir = "dataset/path"
     is_dexray = model_name == "dexray"
 
     train_benign = CustomDataset(root_dir, transform=transform_no_augmentation, apk_list=benign_train_apks, class_filter=0, selection_mode=mem_regions, color_mode=color)
@@ -535,5 +535,5 @@ def train_memory_regions(mem_regions, model_name, pretrained_val, color, save_di
 
 # === Run Training ===
 # Example usage:
-save_dir = "/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/time_drift"
+save_dir = "save/dir/path"
 train_memory_regions('data_stack', 'resnet18', True, "RGB", save_dir)

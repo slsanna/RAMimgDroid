@@ -58,7 +58,7 @@ class CustomDataset(Dataset):
             "data_stack": [r"^/data/.*", r"\\[stack\\]"]
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -115,7 +115,7 @@ class CustomDataset(Dataset):
 
 
 def cnn_then_boost_classifiersOLD(mem_regions="data_stack"):
-    root_dir = "/mnt/malware_ram/Android"
+    root_dir = "path/dataset"
 
     logger.remove()
     logger.add(f"cnn_APK_boost_classifiers_{mem_regions}.log", format="{message}")
@@ -124,9 +124,9 @@ def cnn_then_boost_classifiersOLD(mem_regions="data_stack"):
     benign_apk_paths_train = [os.path.join(root_dir, 'benign_dumps', apk) for apk in benign_apks[:1300]]
     benign_apk_paths_val = [os.path.join(root_dir, 'benign_dumps', apk) for apk in benign_apks[1300:1500]]
 
-    malicious_apks = sorted(os.listdir(os.path.join(root_dir, 'dumps_dataset')))
-    malicious_apk_paths_train = [os.path.join(root_dir, 'dumps_dataset', apk) for apk in malicious_apks[:1300]]
-    malicious_apk_paths_val = [os.path.join(root_dir, 'dumps_dataset', apk) for apk in malicious_apks[1300:1500]]
+    malicious_apks = sorted(os.listdir(os.path.join(root_dir, 'malware_dumps')))
+    malicious_apk_paths_train = [os.path.join(root_dir, 'malware_dumps', apk) for apk in malicious_apks[:1300]]
+    malicious_apk_paths_val = [os.path.join(root_dir, 'malware_dumps', apk) for apk in malicious_apks[1300:1500]]
 
     train_benign = CustomDataset(root_dir, transform_no_augmentation, apk_list=benign_apk_paths_train, class_filter=0, selection_mode=mem_regions)
     train_malicious = CustomDataset(root_dir, transform_no_augmentation, apk_list=malicious_apk_paths_train, class_filter=1, selection_mode=mem_regions)
@@ -142,7 +142,7 @@ def cnn_then_boost_classifiersOLD(mem_regions="data_stack"):
     model = models.resnet18(pretrained=False)
     in_features = model.fc.in_features
     model.fc = nn.Sequential(nn.BatchNorm1d(in_features), nn.Dropout(0.4), nn.Linear(in_features, 2))
-    model.load_state_dict(torch.load("/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/pre-trained/data_stack_resnet18_RGB_best_validation_True.pth", map_location=device))
+    model.load_state_dict(torch.load("path/to/pretrained/model", map_location=device))
     model.fc = nn.Identity()
     model = model.to(device)
     model.eval()
@@ -150,7 +150,7 @@ def cnn_then_boost_classifiersOLD(mem_regions="data_stack"):
     def extract_features(loader):
         features, labels = [], []
         with torch.no_grad():
-            for imgs, lbls, _ in loader:  # ✅ Fixed here
+            for imgs, lbls, _ in loader:  
                 imgs = imgs.to(device)
                 feats = model(imgs)
                 features.append(feats.cpu().numpy())
@@ -177,7 +177,7 @@ from sklearn.metrics import accuracy_score
 from collections import defaultdict, Counter
 
 def cnn_then_boost_classifiers(mem_regions="data_stack"):
-    root_dir = "/mnt/malware_ram/Android"
+    root_dir = "path/dataset"
 
     logger.remove()
     logger.add(f"cnn_APK_boost_classifiers_{mem_regions}.log", format="{message}")
@@ -186,9 +186,9 @@ def cnn_then_boost_classifiers(mem_regions="data_stack"):
     benign_apk_paths_train = [os.path.join(root_dir, 'benign_dumps', apk) for apk in benign_apks[:1300]]
     benign_apk_paths_val = [os.path.join(root_dir, 'benign_dumps', apk) for apk in benign_apks[1300:1500]]
 
-    malicious_apks = sorted(os.listdir(os.path.join(root_dir, 'dumps_dataset')))
-    malicious_apk_paths_train = [os.path.join(root_dir, 'dumps_dataset', apk) for apk in malicious_apks[:1300]]
-    malicious_apk_paths_val = [os.path.join(root_dir, 'dumps_dataset', apk) for apk in malicious_apks[1300:1500]]
+    malicious_apks = sorted(os.listdir(os.path.join(root_dir, 'malware_dumps')))
+    malicious_apk_paths_train = [os.path.join(root_dir, 'malware_dumps', apk) for apk in malicious_apks[:1300]]
+    malicious_apk_paths_val = [os.path.join(root_dir, 'malware_dumps', apk) for apk in malicious_apks[1300:1500]]
 
     train_benign = CustomDataset(root_dir, transform_no_augmentation, apk_list=benign_apk_paths_train, class_filter=0, selection_mode=mem_regions)
     train_malicious = CustomDataset(root_dir, transform_no_augmentation, apk_list=malicious_apk_paths_train, class_filter=1, selection_mode=mem_regions)
@@ -204,7 +204,7 @@ def cnn_then_boost_classifiers(mem_regions="data_stack"):
     model = models.resnet18(pretrained=False)
     in_features = model.fc.in_features
     model.fc = nn.Sequential(nn.BatchNorm1d(in_features), nn.Dropout(0.4), nn.Linear(in_features, 2))
-    model.load_state_dict(torch.load("/home/ssanna/Desktop/malware_ram/Android/imgs/sections/memory_regions/data_stack/pre-trained/data_stack_resnet18_RGB_best_validation_True.pth", map_location=device))
+    model.load_state_dict(torch.load("path/to/pretrained/model", map_location=device))
     model.fc = nn.Identity()
     model = model.to(device)
     model.eval()
