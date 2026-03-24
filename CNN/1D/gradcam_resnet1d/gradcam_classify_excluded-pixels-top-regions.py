@@ -146,8 +146,8 @@ def mask_top_pixels(image_tensor, heatmap, num_pixels=50):
 
 # === MAIN ===
 if __name__ == "__main__":
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth"
-    root_dir = "/mnt/malware_ram/Android"
+    model_path = "path/to/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth"
+    root_dir = "dataset/path"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.remove()
     logger.add("resnet1d_exclude_top_pixels.log", format="{message}")
