@@ -97,7 +97,7 @@ class CustomImageDataset(Dataset):
             "data_stack": [r"^/data/.*", r"\\[stack\\]"],
             "memory_regions": [r"\[stack\]", r"\[vvar\]"]
         }
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
         for label, cdir in class_dirs.items():
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     model.eval()
 
     benign_val_apks = sorted(os.listdir(os.path.join(root_dir, "benign_dumps")))[1500:]
-    malicious_val_apks = sorted(os.listdir(os.path.join(root_dir, "dumps_dataset")))[1500:]
+    malicious_val_apks = sorted(os.listdir(os.path.join(root_dir, "malware_dumps")))[1500:]
     apk_list = [(apk, 0) for apk in benign_val_apks] + [(apk, 1) for apk in malicious_val_apks]
 
     y_true, y_pred = [], []
