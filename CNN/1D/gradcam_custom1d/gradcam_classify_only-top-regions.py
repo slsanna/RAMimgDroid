@@ -111,8 +111,8 @@ class CustomImageDataset(Dataset):
 
 # === Main Evaluation ===
 if __name__ == "__main__":
-    root_dir = "/mnt/malware_ram/Android"
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/custom1d/1D_data_stack_rgb1dcnn_best_val.pth"
+    root_dir = "path/dataset"
+    model_path = "path/to/custom1d/1D_data_stack_rgb1dcnn_best_val.pth"
 
     benign_apks = sorted(os.listdir(os.path.join(root_dir, "benign_dumps")))[1500:]
     malware_apks = sorted(os.listdir(os.path.join(root_dir, "dumps_dataset")))[1500:]
