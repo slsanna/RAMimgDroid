@@ -135,8 +135,8 @@ def mask_top_features_1d(input_tensor, cam, num_features=50):
     return masked
 
 def test_rgb1dcnn_exclude_top_region(mem_regions, model_name, color, save_dir):
-    root_dir = "/mnt/malware_ram/Android"
-    model_path = os.path.join("/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/custom1d/1D_data_stack_rgb1dcnn_best_val.pth")
+    root_dir = "dataset_path"
+    model_path = os.path.join("path/to/1d_cnn/custom1d/1D_data_stack_rgb1dcnn_best_val.pth")
     log_path = os.path.join("exclude-pixels-top-regions.log")
 
     logger.remove()
@@ -211,5 +211,5 @@ def test_rgb1dcnn_exclude_top_region(mem_regions, model_name, color, save_dir):
         print("No valid predictions to report.")
 
 # === Run test with Grad-CAM masking ===
-save_dir = "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/custom1d"
+save_dir = "path/to/save/results/custom1d"
 test_rgb1dcnn_exclude_top_region('data_stack', 'rgb1dcnn', 'RGB', save_dir)
