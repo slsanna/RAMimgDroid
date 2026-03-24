@@ -132,8 +132,8 @@ class GradCAM1D:
 
 # === MAIN ===
 if __name__ == "__main__":
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth"
-    root_dir = "/mnt/malware_ram/Android"
+    model_path = "path/to/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth"
+    root_dir = "dataset/path"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.remove()
     logger.add("resnet1d_exclude_top_regions.log", format="{message}")
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     model.to(device).eval()
 
     benign_apks = sorted([os.path.join(root_dir, "benign_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "benign_dumps"))])[1500:]
-    malicious_apks = sorted([os.path.join(root_dir, "dumps_dataset", apk) for apk in os.listdir(os.path.join(root_dir, "dumps_dataset"))])[1500:]
+    malicious_apks = sorted([os.path.join(root_dir, "malware_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "dumps_dataset"))])[1500:]
     apk_list = benign_apks + malicious_apks
 
     y_true = []
