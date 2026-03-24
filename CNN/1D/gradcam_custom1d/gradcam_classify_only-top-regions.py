@@ -75,7 +75,7 @@ class CustomImageDataset(Dataset):
             "stack": [r"\[stack\]"],
             "memory_regions": [r"\[stack\]", r"\[vvar\]"]
         }
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
         for label, folder in class_dirs.items():
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     model_path = "path/to/custom1d/1D_data_stack_rgb1dcnn_best_val.pth"
 
     benign_apks = sorted(os.listdir(os.path.join(root_dir, "benign_dumps")))[1500:]
-    malware_apks = sorted(os.listdir(os.path.join(root_dir, "dumps_dataset")))[1500:]
+    malware_apks = sorted(os.listdir(os.path.join(root_dir, "malware_dumps")))[1500:]
     apk_list = [(apk, 0) for apk in benign_apks] + [(apk, 1) for apk in malware_apks]
 
     model = RGB1DCNN().to(device)
