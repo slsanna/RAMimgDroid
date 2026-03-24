@@ -140,8 +140,8 @@ class CustomImageDataset(Dataset):
 
 # === Main Script ===
 if __name__ == "__main__":
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/custom1d/1D_data_stack_rgb1dcnn_best_val.pth"
-    root_dir = "/mnt/malware_ram/Android"
+    model_path = "path/to/custom1d/1D_data_stack_rgb1dcnn_best_val.pth"
+    root_dir = "dataset/path"
     log_path = "classify_only-top-pixels-top-regions_rgb1dcnn.log"
 
     logger.remove()
