@@ -47,7 +47,7 @@ class CustomDataset(Dataset):
             "stack": [r"\[stack\]"],
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     model.to(device).eval()
 
     benign_apks = sorted([os.path.join(root_dir, "benign_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "benign_dumps"))])[1500:]
-    malicious_apks = sorted([os.path.join(root_dir, "dumps_dataset", apk) for apk in os.listdir(os.path.join(root_dir, "dumps_dataset"))])[1500:]
+    malicious_apks = sorted([os.path.join(root_dir, "malware_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "malware_dumps"))])[1500:]
     apk_list = benign_apks + malicious_apks
 
     y_true, y_pred = [], []
