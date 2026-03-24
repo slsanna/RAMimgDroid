@@ -46,7 +46,7 @@ class CustomDataset(Dataset):
             "stack": [r"\[stack\]"],
         }
 
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -148,8 +148,8 @@ def keep_only_top_pixels(image_tensor, heatmap, num_pixels=50):
 
 # === MAIN ===
 if __name__ == "__main__":
-    model_path = "/home/ssanna/Desktop/malware_ram/Android/imgs/1d_cnn/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth"
-    root_dir = "/mnt/malware_ram/Android"
+    model_path = "path/to/resnet/resnet18-data_stack_resnet1d_RGB_best_validation_True.pth"
+    root_dir = "dataset/path"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.remove()
     logger.add("classify_only_top_pixels_resnet1d.log", format="{message}")
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     model.eval()
 
     benign_val_apks = sorted([os.path.join(root_dir, "benign_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "benign_dumps"))])[1500:]
-    malicious_val_apks = sorted([os.path.join(root_dir, "dumps_dataset", apk) for apk in os.listdir(os.path.join(root_dir, "dumps_dataset"))])[1500:]
+    malicious_val_apks = sorted([os.path.join(root_dir, "malware_dumps", apk) for apk in os.listdir(os.path.join(root_dir, "malware_dumps"))])[1500:]
     apk_list = benign_val_apks + malicious_val_apks
 
     y_true, y_pred = [], []
