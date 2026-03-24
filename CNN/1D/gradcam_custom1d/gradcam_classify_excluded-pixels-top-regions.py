@@ -51,7 +51,7 @@ class CustomImageDataset(Dataset):
     def __init__(self, root_dir, selection_mode="stack", apk_list=None, class_filter=None):
         self.samples = []
         selection_map = {"stack": [r"\\[stack\\]"], "data_stack": [r"^/data/.*", r"\\[stack\\]"]}
-        class_dirs = {0: 'benign_dumps', 1: 'dumps_dataset'}
+        class_dirs = {0: 'benign_dumps', 1: 'malware_dumps'}
         if class_filter is not None:
             class_dirs = {class_filter: class_dirs[class_filter]}
 
@@ -143,7 +143,7 @@ def test_rgb1dcnn_exclude_top_region(mem_regions, model_name, color, save_dir):
     logger.add(log_path, format="{message}")
 
     benign_paths = sorted(os.listdir(os.path.join(root_dir, "benign_dumps")))[1500:]
-    malware_paths = sorted(os.listdir(os.path.join(root_dir, "dumps_dataset")))[1500:]
+    malware_paths = sorted(os.listdir(os.path.join(root_dir, "malware_dumps")))[1500:]
 
     y_true, y_pred = [], []
 
